@@ -6,6 +6,9 @@ import Home from "./home/index.jsx";
 import Dashboard from "./dashboard/index.jsx";
 import Signin from "./auth/sign-in/index.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ClerkProvider } from '@clerk/clerk-react'
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 const router = createBrowserRouter([
   {
@@ -23,6 +26,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <RouterProvider router={router} />
+     </ClerkProvider>
   </StrictMode>
 );
