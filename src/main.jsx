@@ -7,6 +7,7 @@ import Dashboard from "./dashboard/index.jsx";
 import Signin from "./auth/sign-in/index.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ClerkProvider } from '@clerk/clerk-react'
+import EditResume from "./dashboard/resume/[resumeid]/edit";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
     children: [
      
       { path: "/dashboard", element: <Dashboard /> },
+      {
+        path : '/dashboard/resume/:resumeid/edit',
+        element : <EditResume/>
+      }
     ],
   },
    { path: "/", element: <Home /> },
