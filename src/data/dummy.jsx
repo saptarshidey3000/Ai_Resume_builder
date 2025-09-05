@@ -50,6 +50,7 @@ export default {
       startDate: '2014',
       endDate: '2018',
       grade: '3.8 GPA'
+      
     },
     {
       id: 2,

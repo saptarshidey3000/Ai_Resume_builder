@@ -12,12 +12,12 @@ const EditResume = () => {
         setresumeinfo(dummy);
     },[])
   return (
-    <ResumeInfoContext.provider value={{}}>
+    <ResumeInfoContext.Provider value={{resumeinfo,setresumeinfo}}>
     <div className='grid grid-cols-1 md:grid-cols-2 p-10 gap-10'>
       <Formsection/>
       <Preview/>
     </div>
-    </ResumeInfoContext.provider>
+    </ResumeInfoContext.Provider>
   )
 }
 
