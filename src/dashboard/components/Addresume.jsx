@@ -49,9 +49,9 @@ const Addresume = () => {
 
       const response = await Globalapi.CreatenewResume(data);
       console.log('Resume created successfully:', response);
-      console.log(response.data.data.documentsId)
+      console.log(response.data.data.documentId)
       if (response) {
-        navigation('/dashboard/resume/' + response.data.data.documentsId + "/edit");
+        navigation('/dashboard/resume/' + response.data.data.documentId + "/edit");
         // Close dialog and reset form on success
         setopendial(false);
         setresumetitle("");

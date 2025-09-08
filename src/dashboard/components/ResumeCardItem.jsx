@@ -7,7 +7,8 @@ const ResumeCardItem = ({ resume }) => {
   const data = resume.attributes || resume;
 
   return (
-    <Link to={`/dashboard/resume/${data.resumeid}/edit`}>
+    <Link to={'/dashboard/resume/'+resume.documentId+"/edit"}>
+
       <div className='p-5 bg-secondary flex flex-col
         items-center justify-center h-[280px]
         border border-primary rounded-lg 
