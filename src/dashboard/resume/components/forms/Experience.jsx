@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Input  } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-
+import { ResumeInfoContext } from '@/context/ResumeInfoContext'
 import { Editor } from 'primereact/editor';
         
 const formField={
@@ -11,7 +11,7 @@ const formField={
       state: '',
       startDate: '',
       endDate: '',
-      currentlyWorking: true,
+      currentlyWorking: false,
       workSummary:''
 }
 
@@ -31,6 +31,16 @@ const handlechange = (index, event) => {
 const addnewexp=()=>{
     setExperiencelist([...experiencelist,formField])
 }
+const removenewexp=()=>{
+    setExperiencelist(experiencelist=>experiencelist.slice(0,-1))
+}
+const { resumeinfo, setresumeinfo } = useContext(ResumeInfoContext)
+useEffect(()=>{
+    setresumeinfo({
+        ...resumeinfo,
+        experience:experiencelist
+    })
+},[experiencelist])
   return (
     <div>
          <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 m-t-10">
@@ -63,6 +73,19 @@ const addnewexp=()=>{
                         <label className='text-xs' >End Date</label>
                         <Input type="date" name="endDate" onChange={(event)=>handlechange(index,event)} />
                     </div>
+                    <div>
+  <label className="text-xs p-1">Currently Working</label>
+  <input
+    type="checkbox"
+    checked={experiencelist[index].currentlyWorking}
+    onChange={(e) =>
+      handlechange(index, {
+        target: { name: "currentlyWorking", value: e.target.checked }
+      })
+    }
+  />
+</div>
+
                     <div  className="col-span-2">
                         {/* <label className='text-xs' >Work Summary</label>
                         <Input name="workSummary" onChange={(event)=>handlechange(index,event)} /> */}
@@ -81,7 +104,10 @@ const addnewexp=()=>{
             ))}
         </div>
         <div className='flex justify-between'>
+            <div className='flex gap-2'>
             <Button variant="outline" onClick={addnewexp} className="text-primary"> + Add More Experience </Button>
+            <Button variant="outline" onClick={removenewexp} className="text-primary"> - Remove  </Button>
+            </div>
             <Button>Save</Button>
         </div>  
         </div>
