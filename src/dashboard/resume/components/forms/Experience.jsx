@@ -1,4 +1,3 @@
-// Experience.jsx
 import React, { useEffect, useState, useContext } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -7,9 +6,9 @@ import { Editor } from 'primereact/editor'
 import { Brain, LoaderCircle } from 'lucide-react'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { toast } from 'sonner'
-import DOMPurify from 'dompurify' // npm i dompurify
-import Globalapi from '@service/Globalapi'   // ✅ import like in Summary.jsx
-import { useParams } from 'react-router-dom' // ✅ for resumeid
+import DOMPurify from 'dompurify'
+import Globalapi from '@service/Globalapi'
+import { useParams } from 'react-router-dom'
 
 const apikey = import.meta.env.VITE_GEMINI_API
 const genAI = new GoogleGenerativeAI(apikey)
@@ -25,37 +24,30 @@ const formField = {
   workSummary: ''
 }
 
-
-  const [generatingIndex, setGeneratingIndex] = useState(null) // index currently generating
-  const [loading, setLoading] = useState(false) // ✅ for Save button
-  const { resumeinfo, setresumeinfo } = useContext(ResumeInfoContext)
-  const params = useParams() // ✅ resumeid from URL
-  
 const Experience = () => {
-  const [experiencelist, setExperiencelist] = useState(resumeinfo?.experience?.length > 0 
-  ? resumeinfo.experience 
-  : [{ ...formField }]
-)
+  const { resumeinfo, setresumeinfo } = useContext(ResumeInfoContext)
+  const params = useParams()
 
-  // sync with context
+  const [experiencelist, setExperiencelist] = useState(
+    resumeinfo?.experience?.length > 0 ? resumeinfo.experience : [{ ...formField }]
+  )
+  const [generatingIndex, setGeneratingIndex] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  // Update local list if context changes (e.g., initial load)
   useEffect(() => {
-    setresumeinfo({
-      ...resumeinfo,
-      experience: experiencelist
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (resumeinfo?.experience?.length > 0) {
+      setExperiencelist(resumeinfo.experience)
+    }
+  }, [resumeinfo])
+
+  // Safe context sync: only update if different
+  useEffect(() => {
+    if (JSON.stringify(resumeinfo?.experience) !== JSON.stringify(experiencelist)) {
+      setresumeinfo({ ...resumeinfo, experience: experiencelist })
+    }
   }, [experiencelist])
-  useEffect(() => {
-  if (resumeinfo?.experience?.length > 0) {
-    setExperiencelist(resumeinfo.experience)
-  }
-}, [resumeinfo])
 
-useEffect(() => {
-  setresumeinfo({ ...resumeinfo, experience: experiencelist })
-}, [experiencelist])
-
-  // controlled-change handler
   const handlechange = (index, event) => {
     const { name, value } = event.target
     const updatedList = [...experiencelist]
@@ -73,7 +65,6 @@ useEffect(() => {
     }
   }
 
-  // ✅ normalize Gemini output
   const normalizeToHtml = (raw) => {
     if (!raw) return ''
     let html = raw.trim()
@@ -83,16 +74,12 @@ useEffect(() => {
         .split(/\r?\n/)
         .map((l) => l.replace(/^[-\d\.\)\s]+/, '').trim())
         .filter(Boolean)
-      if (lines.length) {
-        html = `<ul>${lines.map((l) => `<li>${l}</li>`).join('')}</ul>`
-      } else {
-        html = `<p>${html}</p>`
-      }
+      if (lines.length) html = `<ul>${lines.map((l) => `<li>${l}</li>`).join('')}</ul>`
+      else html = `<p>${html}</p>`
     }
     return html
   }
 
-  // AI generator
   const generateByAI = async (index) => {
     const positiontitle = (experiencelist[index]?.positiontitle || '').trim()
     if (!positiontitle) {
@@ -115,7 +102,7 @@ Return ONLY valid HTML: a single <ul> with <li> items (no extra explanation). Ke
       try {
         safe = DOMPurify.sanitize(html)
       } catch (err) {
-        console.warn('DOMPurify sanitize failed, falling back to raw HTML', err)
+        console.warn('DOMPurify sanitize failed, using raw HTML', err)
       }
 
       const updated = [...experiencelist]
@@ -130,15 +117,10 @@ Return ONLY valid HTML: a single <ul> with <li> items (no extra explanation). Ke
     }
   }
 
-  // ✅ Save handler (like Summary.jsx)
   const onSave = (e) => {
     e.preventDefault()
     setLoading(true)
-    const data = {
-      data: {
-        experience: experiencelist,
-      },
-    }
+    const data = { data: { experience: experiencelist } }
     Globalapi.Updateresume(params.resumeid, data).then(
       (resp) => {
         console.log(resp)
@@ -154,118 +136,109 @@ Return ONLY valid HTML: a single <ul> with <li> items (no extra explanation). Ke
 
   return (
     <div>
-      <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 m-t-10">
+      <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
         <h2 className="font-bold text-lg">Professional Experience</h2>
         <p>Add previous experience</p>
 
         <form onSubmit={onSave}>
-          <div>
-            {experiencelist.map((item, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-2 border border-primary gap-3 p-3 my-5 rounded-lg"
-              >
-                <div>
-                  <label className="text-xs">Position Title</label>
-                  <Input
-                    name="positiontitle"
-                    value={item.positiontitle}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs">Company Name</label>
-                  <Input
-                    name="companyName"
-                    value={item.companyName}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs">City</label>
-                  <Input
-                    name="city"
-                    value={item.city}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs">State</label>
-                  <Input
-                    name="state"
-                    value={item.state}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs">Start Date</label>
-                  <Input
-                    type="date"
-                    name="startDate"
-                    value={item.startDate}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs">End Date</label>
-                  <Input
-                    type="date"
-                    name="endDate"
-                    value={item.endDate}
-                    onChange={(e) => handlechange(index, e)}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs p-1">Currently Working</label>
-                  <input
-                    type="checkbox"
-                    checked={Boolean(item.currentlyWorking)}
-                    onChange={(e) =>
-                      handlechange(index, {
-                        target: { name: 'currentlyWorking', value: e.target.checked },
-                      })
-                    }
-                  />
-                </div>
-
-                <div className="col-span-2">
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-medium text-gray-700">Work Summary</label>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-2 border-primary text-primary"
-                      onClick={() => generateByAI(index)}
-                      disabled={generatingIndex !== null && generatingIndex !== index}
-                      type="button"
-                    >
-                      {generatingIndex === index ? (
-                        <LoaderCircle className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Brain className="w-4 h-4" />
-                      )}
-                      Generate from AI
-                    </Button>
-                  </div>
-
-                  <Editor
-                    value={item.workSummary}
-                    onTextChange={(e) =>
-                      handlechange(index, { target: { name: 'workSummary', value: e.htmlValue } })
-                    }
-                    style={{ height: '200px' }}
-                    className="rounded-md border border-primary"
-                  />
-                </div>
+          {experiencelist.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-2 border border-primary gap-3 p-3 my-5 rounded-lg"
+            >
+              <div>
+                <label className="text-xs">Position Title</label>
+                <Input
+                  name="positiontitle"
+                  value={item.positiontitle}
+                  onChange={(e) => handlechange(index, e)}
+                />
               </div>
-            ))}
-          </div>
+
+              <div>
+                <label className="text-xs">Company Name</label>
+                <Input
+                  name="companyName"
+                  value={item.companyName}
+                  onChange={(e) => handlechange(index, e)}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs">City</label>
+                <Input name="city" value={item.city} onChange={(e) => handlechange(index, e)} />
+              </div>
+
+              <div>
+                <label className="text-xs">State</label>
+                <Input name="state" value={item.state} onChange={(e) => handlechange(index, e)} />
+              </div>
+
+              <div>
+                <label className="text-xs">Start Date</label>
+                <Input
+                  type="date"
+                  name="startDate"
+                  value={item.startDate}
+                  onChange={(e) => handlechange(index, e)}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs">End Date</label>
+                <Input
+                  type="date"
+                  name="endDate"
+                  value={item.endDate}
+                  onChange={(e) => handlechange(index, e)}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs p-1">Currently Working</label>
+                <input
+                  type="checkbox"
+                  checked={Boolean(item.currentlyWorking)}
+                  onChange={(e) =>
+                    handlechange(index, {
+                      target: { name: 'currentlyWorking', value: e.target.checked }
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-span-2">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-medium text-gray-700">Work Summary</label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 border-primary text-primary"
+                    onClick={() => generateByAI(index)}
+                    disabled={generatingIndex !== null && generatingIndex !== index}
+                    type="button"
+                  >
+                    {generatingIndex === index ? (
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Brain className="w-4 h-4" />
+                    )}
+                    Generate from AI
+                  </Button>
+                </div>
+
+                <Editor
+                  key={index}
+                  value={item.workSummary}
+                  onTextChange={(e) =>
+                    handlechange(index, { target: { name: 'workSummary', value: e.htmlValue } })
+                  }
+                  style={{ height: '200px' }}
+                  className="rounded-md border border-primary"
+                />
+              </div>
+            </div>
+          ))}
 
           <div className="flex justify-between">
             <div className="flex gap-2">
