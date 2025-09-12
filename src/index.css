@@ -20,13 +20,19 @@
   font-size: 14px;
 }
 /* global.css */
+.resume-preview p {
+  margin: 0.25rem 0;
+}
+
 .resume-preview ul {
-  list-style-type: disc;
-  padding-left: 1.25rem; /* indent bullets */
+  padding-left: 1rem;
+  margin: 0.25rem 0;
 }
+
 .resume-preview li {
-  margin-bottom: 0.25rem; /* spacing between bullets */
+  margin-bottom: 0.25rem;
 }
+
 
 
 
