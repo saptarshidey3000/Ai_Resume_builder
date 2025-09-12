@@ -17,7 +17,7 @@ const Experience = ({resumeinfo}) => {
                     style={{
                         color:resumeinfo?.themeColor
                     }}
-                >{experience?.title}</h2>
+                >{experience?.positiontitle}</h2>
                 <h2 className='text-xs flex justify-between' >
                     {experience?.companyName},
                     {experience?.city},
@@ -27,10 +27,13 @@ const Experience = ({resumeinfo}) => {
 </span>
 
                 </h2>
-                <p className='text-xs my-2'>
+                {/* <p className='text-xs my-2'>
                     {experience.workSummary}
-                </p>
-                <div dangerouslySetInnerHTML={{__html:experience?.workSummary}} className='text-xs my-2' />
+                </p> */}
+<div
+  dangerouslySetInnerHTML={{ __html: experience?.workSummary }}
+  className="text-xs my-2 resume-preview"
+/>
             </div>
         ))}
     </div>

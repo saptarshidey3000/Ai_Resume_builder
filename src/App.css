@@ -14,6 +14,14 @@
 .animate-fade-in-out {
   animation: fade-in-out 2s forwards;
 }
+/* global.css */
+.resume-preview ul {
+  list-style-type: disc;
+  padding-left: 1.25rem; /* indent bullets */
+}
+.resume-preview li {
+  margin-bottom: 0.25rem; /* spacing between bullets */
+}
 
 
 .logo {

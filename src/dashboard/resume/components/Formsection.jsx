@@ -5,8 +5,9 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { LayoutGrid } from 'lucide-react'
 import Summary from './forms/Summary'
 import Experience from './forms/Experience'
+import Education from './forms/Education'
 const Formsection = () => {
-  const [activeformindex , setactiveformindex] = useState(3);
+  const [activeformindex , setactiveformindex] = useState(4);
   const [enablenext , setenablenext] = useState(false);
   return (
     <div>
@@ -25,11 +26,14 @@ const Formsection = () => {
         </div>
       </div>
       {/* Personal details  */}
-        {activeformindex==1?  <Personaldetails enablenext={(v)=>setenablenext(v)} /> 
+        {activeformindex==1?  
+        <Personaldetails enablenext={(v)=>setenablenext(v)} /> 
         :activeformindex==2?
       <Summary enablenext={(v)=>setenablenext(v)} />
         :activeformindex==3?
         <Experience enablenext={(v)=>setenablenext(v)}  />
+          :activeformindex==4?
+          <Education  enablenext={(v)=>setenablenext(v)} />
       :null}
      
 

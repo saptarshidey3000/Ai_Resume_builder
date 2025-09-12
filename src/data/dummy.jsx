@@ -27,7 +27,7 @@ export default {
     },
     {
       id: 2,
-      title: 'Software Engineer',
+      positiontitle: 'Software Engineer',
       companyName: 'Google',
       city: 'San Francisco',
       state: 'CA',
