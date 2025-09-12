@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ResumeInfoContext } from '@/context/ResumeInfoContext'
@@ -39,14 +39,24 @@ const Experience = () => {
     if (resumeinfo?.experience?.length > 0) {
       setExperiencelist(resumeinfo.experience)
     }
-  }, [resumeinfo])
+  }, [resumeinfo?.experience])
 
-  // Safe context sync: only update if different
+  // Debounced context sync to prevent glitching
+  const updateContext = useCallback(() => {
+    setresumeinfo(prev => ({
+      ...prev,
+      experience: experiencelist
+    }))
+  }, [experiencelist, setresumeinfo])
+
+  // Use a timeout to debounce context updates
   useEffect(() => {
-    if (JSON.stringify(resumeinfo?.experience) !== JSON.stringify(experiencelist)) {
-      setresumeinfo({ ...resumeinfo, experience: experiencelist })
-    }
-  }, [experiencelist])
+    const timeoutId = setTimeout(() => {
+      updateContext()
+    }, 300) // 300ms delay
+
+    return () => clearTimeout(timeoutId)
+  }, [experiencelist, updateContext])
 
   const handlechange = (index, event) => {
     const { name, value } = event.target
@@ -126,6 +136,15 @@ Return ONLY valid HTML: a single <ul> with <li> items (no extra explanation). Ke
         console.log(resp)
         setLoading(false)
         toast('Experience Updated')
+        // Force immediate context update on save
+        setresumeinfo(prev => ({
+          ...prev,
+          experience: experiencelist
+        }))
+        // Enable next button after successful save
+        if (enablenext) {
+          enablenext(true)
+        }
       },
       (error) => {
         setLoading(false)
