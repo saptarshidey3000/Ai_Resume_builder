@@ -24,22 +24,22 @@ export default {
         'Built REST APIs with Node.js and Express.',
         'Worked with AWS cloud services for deployment.'
       ]
-    },
-    {
-      id: 2,
-      positiontitle: 'Software Engineer',
-      companyName: 'Google',
-      city: 'San Francisco',
-      state: 'CA',
-      startDate: 'Jun 2018',
-      endDate: 'Dec 2020',
-      currentlyWorking: false,
-      workSummary: [
-        'Developed scalable backend services using Java and Spring Boot.',
-        'Collaborated with cross-functional teams to deliver projects.',
-        'Optimized database queries and improved system performance.'
-      ]
     }
+    // {
+    //   id: 2,
+    //   positiontitle: 'Software Engineer',
+    //   companyName: 'Google',
+    //   city: 'San Francisco',
+    //   state: 'CA',
+    //   startDate: 'Jun 2018',
+    //   endDate: 'Dec 2020',
+    //   currentlyWorking: false,
+    //   workSummary: [
+    //     'Developed scalable backend services using Java and Spring Boot.',
+    //     'Collaborated with cross-functional teams to deliver projects.',
+    //     'Optimized database queries and improved system performance.'
+    //   ]
+    // }
   ],
 
   education: [
@@ -51,27 +51,29 @@ export default {
       endDate: '2018',
       grade: '3.8 GPA'
       
-    },
-    {
-      id: 2,
-      institution: 'Stanford University',
-      degree: 'Master of Science in Software Engineering',
-      startDate: '2018',
-      endDate: '2020',
-      grade: '3.9 GPA'
     }
   ],
 
-  skills: [
-    'JavaScript',
-    'React.js',
-    'Node.js',
-    'Express.js',
-    'MongoDB',
-    'SQL',
-    'HTML5 & CSS3',
-    'Git & GitHub',
-    'AWS & Cloud Deployment',
-    'Agile/Scrum'
-  ]
+   skills:[
+        {
+            id:1,
+            name:'Angular',
+            rating:3,
+        },
+        {
+            id:1,
+            name:'React',
+            rating:5,
+        },
+        {
+            id:1,
+            name:'MySql',
+            rating:4,
+        },
+        {
+            id:1,
+            name:'React Native',
+            rating:3,
+        }
+    ]
 };

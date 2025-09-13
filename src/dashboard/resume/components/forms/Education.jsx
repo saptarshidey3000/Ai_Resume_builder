@@ -63,29 +63,39 @@ const Education = () => {
     }
   }
 
-  const onSave = (e) => {
-    e.preventDefault()
-    setLoading(true)
+ const onSave = (e) => {
+  e.preventDefault()
+  setLoading(true)
 
-    const data = { data: { education: educationlist } }
-
-    Globalapi.Updateresume(params.resumeid, data).then(
-      (resp) => {
-        console.log(resp)
-        setLoading(false)
-        toast('Education Updated')
-        // Force immediate context update
-        setresumeinfo(prev => ({
-          ...prev,
-          education: educationlist
-        }))
-      },
-      (error) => {
-        setLoading(false)
-        toast.error('Save failed')
-      }
-    )
+  const payload = {
+    data: {
+      education: educationlist.map(({ id, ...rest }) => rest) // remove id if exists
+    }
   }
+
+  console.log("Saving resumeid:", params.resumeid)
+  console.log("Sending payload:", payload)
+
+  Globalapi.Updateresume(params.resumeid, payload).then(
+    (resp) => {
+      console.log("Update success:", resp)
+      setLoading(false)
+      toast('Education Updated')
+
+      // Force immediate context update
+      setresumeinfo(prev => ({
+        ...prev,
+        education: educationlist
+      }))
+    },
+    (error) => {
+      console.error("Update failed:", error)
+      setLoading(false)
+      toast.error('Save failed')
+    }
+  )
+}
+
 
   return (
     <div>
