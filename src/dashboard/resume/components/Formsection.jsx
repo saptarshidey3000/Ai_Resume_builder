@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react'
 
 const Formsection = () => {
-  const [activeformindex, setactiveformindex] = useState(3) // starting at Experience
+  const [activeformindex, setactiveformindex] = useState(4) // starting at Experience
   const [enablenext, setenablenext] = useState(true)
 
   // Array of all form components
