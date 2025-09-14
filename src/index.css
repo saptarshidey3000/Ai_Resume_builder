@@ -32,7 +32,19 @@
 .resume-preview li {
   margin-bottom: 0.25rem;
 }
-
+ @media print{
+  #no-print{
+    display: none;
+  }
+  #print-area{
+    display: block;
+  }
+  body{
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+ }
 
 
 
