@@ -11,7 +11,7 @@ const Education = ({resumeinfo}) => {
         <hr style={{
             borderColor:resumeinfo?.themeColor
         }}/>
-        {resumeinfo?.education.map((education,index)=>(
+        {resumeinfo?.education?.map((education,index)=>(
             <div key={index} className='my-3'>
                 <h2 className='text-sm font-bold'
                     style={{

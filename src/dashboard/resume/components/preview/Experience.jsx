@@ -11,7 +11,7 @@ const Experience = ({resumeinfo}) => {
         <hr style={{
             borderColor:resumeinfo?.themeColor
         }}/>
-        {resumeinfo?.experience.map((experience,index)=>(
+        {resumeinfo?.experience?.map((experience,index)=>(
             <div key={index} className='my-5' >
                 <h2 className='text-sm font-bold'
                     style={{

@@ -3,58 +3,78 @@ import Personaldetails from './forms/Personaldetails'
 import Summary from './forms/Summary'
 import Experience from './forms/Experience'
 import Education from './forms/Education'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react'
 import Skills from './forms/Skills'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft, ArrowRight, Home, LayoutGrid } from 'lucide-react'
+import { Link, Navigate } from 'react-router-dom'
 
-const Formsection = () => {
-  const [activeformindex, setactiveformindex] = useState(1) // starting at Experience
-  const [enablenext, setenablenext] = useState(true)
+const Formsection = ({ resumeId }) => {
+  const [activeFormIndex, setActiveFormIndex] = useState(1) // starting at 1
+  const [enableNext, setEnableNext] = useState(true)
 
-  // Array of all form components
-  const forms = [
-    <Personaldetails enablenext={setenablenext} />,
-    <Summary enablenext={setenablenext} />,
-    <Experience enablenext={setenablenext} />,
-    <Education enablenext={setenablenext} /> ,
-    <Skills enablenext={setenablenext}/>
-  ]
+  // Function to trigger redirect
+  const [redirect, setRedirect] = useState(false)
 
   // Handlers
   const handleNext = () => {
-    if (activeformindex < forms.length) {
-      setactiveformindex(prev => prev + 1)
+    if (activeFormIndex < 5) {
+      setActiveFormIndex(prev => prev + 1)
+    } else if (activeFormIndex === 5) {
+      // If it's the last form, trigger redirect
+      setRedirect(true)
     }
   }
 
   const handlePrev = () => {
-    if (activeformindex > 1) {
-      setactiveformindex(prev => prev - 1)
+    if (activeFormIndex > 1) {
+      setActiveFormIndex(prev => prev - 1)
     }
+  }
+
+  // Array of all form components
+  const forms = [
+    <Personaldetails enablenext={setEnableNext} />,
+    <Summary enablenext={setEnableNext} />,
+    <Experience enablenext={setEnableNext} />,
+    <Education enablenext={setEnableNext} />,
+    <Skills enablenext={setEnableNext} />
+  ]
+
+  if (redirect) {
+    return <Navigate to={`/my-resume/${resumeId}/view`} />
   }
 
   return (
     <div>
       {/* Header with buttons */}
       <div className='flex justify-between items-center mb-5'>
-        <Button variant="outline" size="sm" className="flex gap-2">
-          <LayoutGrid /> Theme
-        </Button>
-
+        <div className='flex gap-5'>
+          <Link to={"/dashboard"}>
+            <Button><Home /></Button>
+          </Link>
+          <Button variant="outline" size="sm" className="flex gap-2">
+            <LayoutGrid /> Theme
+          </Button>
+        </div>
         <div className='flex gap-2'>
-          <Button size="sm" onClick={handlePrev} disabled={activeformindex <= 1}>
+          <Button size="sm" onClick={handlePrev} disabled={activeFormIndex <= 1}>
             <ArrowLeft />
           </Button>
 
-          <Button size="sm" className="flex gap-2" onClick={handleNext} disabled={activeformindex >= forms.length}>
-            Next <ArrowRight />
+          <Button
+            size="sm"
+            className="flex gap-2"
+            onClick={handleNext}
+            disabled={!enableNext} // rely on each form to enable/disable
+          >
+            {activeFormIndex === 5 ? 'Finish' : 'Next'} <ArrowRight />
           </Button>
         </div>
       </div>
 
       {/* Render current form */}
       <div>
-        {forms[activeformindex - 1] || <div>No form to display</div>}
+        {forms[activeFormIndex - 1] || <div>No form to display</div>}
       </div>
     </div>
   )
