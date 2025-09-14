@@ -47,9 +47,11 @@ const getuserresume = (mail) => axiosClient.get('/user-resumes', {
 
 const Updateresume = (id,data)=>axiosClient.put(`/user-resumes/${id}`, data)
 
+const getresumebyid=(id)=>axiosClient.get('/user-resumes/'+id+"?populate=*")
 
 export default {
   CreatenewResume,
   getuserresume ,
-  Updateresume
+  Updateresume ,
+  getresumebyid
 };

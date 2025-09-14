@@ -81,6 +81,7 @@ const Skills = () => {
       skills:skilllist
     })
   },[skilllist])
+  
 
   return (
     <div>

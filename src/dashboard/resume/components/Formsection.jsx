@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react'
 import Skills from './forms/Skills'
 
 const Formsection = () => {
-  const [activeformindex, setactiveformindex] = useState(5) // starting at Experience
+  const [activeformindex, setactiveformindex] = useState(1) // starting at Experience
   const [enablenext, setenablenext] = useState(true)
 
   // Array of all form components
