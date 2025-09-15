@@ -49,9 +49,13 @@ const Updateresume = (id,data)=>axiosClient.put(`/user-resumes/${id}`, data)
 
 const getresumebyid=(id)=>axiosClient.get('/user-resumes/'+id+"?populate=*")
 
+const Deleteresumebyid = (id) => axiosClient.delete(`/user-resumes/${id}`);
+
+
 export default {
   CreatenewResume,
   getuserresume ,
   Updateresume ,
-  getresumebyid
+  getresumebyid ,
+  Deleteresumebyid
 };
