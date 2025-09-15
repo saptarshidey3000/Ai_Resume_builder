@@ -17,9 +17,13 @@ function App() {
   return (
     <div>
       <Header />
-      <Outlet />
-      <Toaster richColors position="bottom-right" />
 
+      {/* Add padding to prevent overlap */}
+      <main className="pt-20 px-4">
+        <Outlet />
+      </main>
+
+      <Toaster richColors position="bottom-right" />
     </div>
   );
 }

@@ -14,27 +14,26 @@ const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 const router = createBrowserRouter([
   {
-    element: <App />,
+    element: <App />,   // App = Header + Outlet + Toaster
     children: [
-     
+      { path: "/", element: <Home /> },
       { path: "/dashboard", element: <Dashboard /> },
       {
         path : '/dashboard/resume/:resumeid/edit',
         element : <EditResume/>
+      },
+      {
+        path:'/my-resume/:resumeid/view',
+        element:<Viewresume/>
       }
     ],
   },
-   { path: "/", element: <Home /> },
   {
     path: "/auth/sign-in",
     element: <Signin />,
-  },
-   {
-    path:'/my-resume/:resumeid/view',
-    element:<Viewresume/>
   }
-  
 ]);
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
