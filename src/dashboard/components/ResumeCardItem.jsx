@@ -26,6 +26,17 @@ const ResumeCardItem = ({ resume }) => {
     };
   }, []);
 
+  // Handle card click to redirect to edit page
+  const handleCardClick = (e) => {
+    // Prevent navigation if clicking on dropdown menu or its children
+    if (menuRef.current && menuRef.current.contains(e.target)) {
+      return;
+    }
+    
+    // Navigate to edit page
+    navigate('/dashboard/resume/' + resume.documentId + "/edit");
+  };
+
   const onDelete = async () => {
     setIsDeleting(true);
     try {
@@ -61,6 +72,7 @@ const ResumeCardItem = ({ resume }) => {
   return (
     <div className="group relative">
       <div
+        onClick={handleCardClick}
         className='relative p-8 h-[320px] flex flex-col items-center justify-center
         rounded-2xl overflow-hidden cursor-pointer
         transition-all duration-500 ease-out

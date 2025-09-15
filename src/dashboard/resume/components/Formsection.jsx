@@ -7,6 +7,7 @@ import Education from './forms/Education'
 import Skills from './forms/Skills'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight, Home, LayoutGrid } from 'lucide-react'
+import Themecolor from './Themecolor'
 
 const Formsection = () => {
   const { resumeid } = useParams() // grab resume ID from URL
@@ -52,9 +53,7 @@ const Formsection = () => {
           <Link to={"/dashboard"}>
             <Button><Home /></Button>
           </Link>
-          <Button variant="outline" size="sm" className="flex gap-2">
-            <LayoutGrid /> Theme
-          </Button>
+        <Themecolor/>
         </div>
         <div className='flex gap-2'>
           <Button size="sm" onClick={handlePrev} disabled={activeFormIndex <= 1}>
