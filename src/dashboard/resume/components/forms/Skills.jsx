@@ -19,8 +19,8 @@ const Skills = () => {
   // Initialize skills from resumeinfo
   useEffect(() => {
     if (!isInitialized && resumeinfo) {
-      if (resumeinfo?.Skills && resumeinfo.Skills.length > 0) {
-        setSkilllist(resumeinfo.Skills);
+      if (resumeinfo?.skills && resumeinfo.skills.length > 0) {
+        setSkilllist(resumeinfo.skills);
       }
       setIsInitialized(true);
     }
@@ -51,7 +51,7 @@ const Skills = () => {
 
     const data = {
       data: {
-        Skills: validSkills.map(skill => ({
+        skills: validSkills.map(skill => ({
           name: skill.name.trim(),
           rating: Number(skill.rating) || 0
         }))
@@ -69,7 +69,7 @@ const Skills = () => {
         // Update context immediately
         setresumeinfo(prev => ({
           ...prev,
-          Skills: validSkills,
+          skills: validSkills,
           skills: validSkills // optional, for backward compatibility
         }));
       })
@@ -85,7 +85,7 @@ const Skills = () => {
     if (isInitialized) {
       setresumeinfo(prev => ({
         ...prev,
-        Skills: skilllist,
+        skills: skilllist,
         skills: skilllist
       }));
     }
