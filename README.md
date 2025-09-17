@@ -3,7 +3,7 @@
 ![React](https://img.shields.io/badge/Frontend-React-blue)
 ![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
 ![Strapi](https://img.shields.io/badge/CMS-Strapi-purple)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 
 > An AI-powered Resume Builder that helps users create, edit, and optimize professional resumes instantly.  
 > Features include **AI-generated summary & experience suggestions** and a **Strapi backend** for secure data management.
