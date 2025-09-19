@@ -5,7 +5,7 @@ import Preview from '@/dashboard/resume/components/Preview.jsx'
 import { ResumeInfoContext } from '@/context/ResumeInfoContext.jsx'
 import { useParams } from 'react-router-dom'
 import Globalapi from '@service/Globalapi.js'
-import { RWebShare } from "react-web-share";
+
 
 
 const Viewresume = () => {
@@ -37,16 +37,9 @@ const Viewresume = () => {
           <p className='text-center text-gray-700'>You are ready to Download your Resume and you can share your resume url with others</p>
           <div className='flex justify-between px-44 my-10'>
             <Button onClick={handledownload} >Download</Button>
-            <RWebShare
-        data={{
-          text: "Have a look at my Resume",
-          url: import.meta.env.VITE_BASE_URL+"my-resume/"+resumeid+"/view" ,
-          title: resumeinfo?.firstName+" "+resumeinfo?.lastName ,
-        }}
-        onClick={() => console.log("shared successfully!")}
-      >
+
         <Button>Share 🔗</Button>
-      </RWebShare>
+     
           </div>
         </div>
         </div>
