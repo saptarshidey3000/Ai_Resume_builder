@@ -2,24 +2,25 @@ import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
-import { Button } from '@/components/ui/button';
-import { ResumeInfoContext } from '@/context/ResumeInfoContext';
-import { LoaderCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import Globalapi from '@service/Globalapi';
-import { useParams } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+import Globalapi from "@service/Globalapi";
+import { useParams } from "react-router-dom";
 
 const Skills = () => {
   const [skilllist, setSkilllist] = useState([{ name: "", rating: 0 }]);
   const [loading, setLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+
   const { resumeinfo, setresumeinfo } = useContext(ResumeInfoContext);
   const { resumeid } = useParams();
 
   // Initialize skills from resumeinfo
   useEffect(() => {
     if (!isInitialized && resumeinfo) {
-      if (resumeinfo?.skills && resumeinfo.skills.length > 0) {
+      if (resumeinfo.skills && resumeinfo.skills.length > 0) {
         setSkilllist(resumeinfo.skills);
       }
       setIsInitialized(true);
@@ -46,47 +47,45 @@ const Skills = () => {
     setLoading(true);
 
     const validSkills = skilllist.filter(
-      skill => skill.name && skill.name.trim() !== ''
+      (skill) => skill.name && skill.name.trim() !== ""
     );
 
     const data = {
       data: {
-        skills: validSkills.map(skill => ({
+        skills: validSkills.map((skill) => ({
           name: skill.name.trim(),
-          rating: Number(skill.rating) || 0
-        }))
-      }
+          rating: Number(skill.rating) || 0,
+        })),
+      },
     };
 
-    console.log('Sending data to API:', JSON.stringify(data, null, 2));
+    console.log("Sending data to API:", JSON.stringify(data, null, 2));
 
     Globalapi.Updateresume(resumeid, data)
-      .then(resp => {
-        console.log('API Response:', resp);
+      .then((resp) => {
+        console.log("API Response:", resp);
         setLoading(false);
-        toast('Skills Updated');
+        toast("Skills Updated");
 
         // Update context immediately
-        setresumeinfo(prev => ({
+        setresumeinfo((prev) => ({
           ...prev,
-          skills: validSkills,
-          skills: validSkills // optional, for backward compatibility
+          skills: validSkills, // duplicate removed
         }));
       })
-      .catch(error => {
-        console.error('API Error:', error);
+      .catch((error) => {
+        console.error("API Error:", error);
         setLoading(false);
-        toast('Error saving skills: ' + (error?.message || 'Unknown error'));
+        toast("Error saving skills: " + (error?.message || "Unknown error"));
       });
   };
 
   // Debounced context update for live preview
   const updateContext = useCallback(() => {
     if (isInitialized) {
-      setresumeinfo(prev => ({
+      setresumeinfo((prev) => ({
         ...prev,
         skills: skilllist,
-        skills: skilllist
       }));
     }
   }, [skilllist, setresumeinfo, isInitialized]);
@@ -103,34 +102,38 @@ const Skills = () => {
         <p>Add your skills and rate them</p>
 
         {skilllist.map((item, index) => (
-          <div key={index} className="mb-4 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div
+            key={index}
+            className="mb-4 flex flex-col md:flex-row items-center justify-between gap-6"
+          >
             {/* Skill Input */}
             <div className="flex-1">
               <label className="text-xs block mb-1">Skill name</label>
               <Input
                 value={item.name}
-                onChange={e => handleChange(index, "name", e.target.value)}
+                onChange={(e) => handleChange(index, "name", e.target.value)}
               />
             </div>
 
             {/* Rating Stars */}
             <div className="flex items-center mt-3 md:mt-0">
               <Rating
-  fractions={1}            // allows half stars if needed
-  emptySymbol={<FaStar size={24} color="#d1d5db" />}
-  fullSymbol={<FaStar size={24} color="gold" />}
-  placeholderSymbol={<FaStar size={24} color="#fde68a" />} // optional hover
-  initialRating={item.rating} // initial display
-  onChange={v => handleChange(index, "rating", v)}
-/>
-
+                fractions={1} // allows half stars
+                emptySymbol={<FaStar size={24} color="#d1d5db" />}
+                fullSymbol={<FaStar size={24} color="gold" />}
+                placeholderSymbol={<FaStar size={24} color="#fde68a" />}
+                initialRating={item.rating}
+                onChange={(v) => handleChange(index, "rating", v)}
+              />
             </div>
           </div>
         ))}
 
         <div className="flex justify-between mt-4">
           <div className="flex gap-2">
-            <Button variant="outline" type="button" onClick={addNewSkill}>+ Add Skill</Button>
+            <Button variant="outline" type="button" onClick={addNewSkill}>
+              + Add Skill
+            </Button>
             <Button
               variant="outline"
               type="button"
@@ -142,7 +145,7 @@ const Skills = () => {
           </div>
 
           <Button type="submit" disabled={loading} onClick={onSave}>
-            {loading ? <LoaderCircle className="animate-spin" /> : 'Save'}
+            {loading ? <LoaderCircle className="animate-spin" /> : "Save"}
           </Button>
         </div>
       </div>
