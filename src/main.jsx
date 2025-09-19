@@ -13,31 +13,24 @@ import Viewresume from './my-resume/[resumeid]/view/index.jsx'
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 const router = createBrowserRouter([
-{
-    path:'/',
-    element:<Home/>
-  },
   {
-    element:<App/>,
-    children:[
+    element: <App />,   // App = Header + Outlet + Toaster
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/dashboard", element: <Dashboard /> },
       {
-        path:'/dashboard',
-        element:<Dashboard/>
+        path : '/dashboard/resume/:resumeid/edit',
+        element : <EditResume/>
       },
       {
-        path:'/dashboard/resume/:resumeId/edit',
-        element:<EditResume/>
-      },
-    ]
-  },
- ,
-  {
-    path:'/auth/sign-in',
-    element:<Signin/>
+        path:'/my-resume/:resumeid/view',
+        element:<Viewresume/>
+      }
+    ],
   },
   {
-    path:'/my-resume/:resumeId/view',
-    element:<Viewresume/>
+    path: "/auth/sign-in",
+    element: <Signin />,
   }
 ]);
 
